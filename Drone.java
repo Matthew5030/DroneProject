@@ -1,5 +1,4 @@
 package dsa_assignment2;
-//hello world
 
 import org.apache.log4j.Logger;
 
