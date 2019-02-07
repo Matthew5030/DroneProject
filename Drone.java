@@ -203,7 +203,27 @@ public class Drone implements DroneInterface {
     @Override
     public Portal[] findPathBack() {
         /* WRITE YOUR CODE HERE */
-        return null;
+        //Only the portals taken to exit each
+        //	 * chamber should be included.
+
+
+        Portal[] visitStackArray = new Portal[visitStack.size()];
+        Portal[] visitStackArrayInverted = new Portal[visitStack.size()];
+
+
+        visitStackArray = visitStack.toArray(visitStackArray);
+
+
+        for (int i = 0; i < visitStackArray.length; i++) {
+            visitStackArrayInverted[i]=visitStackArray[visitStackArray.length-i-1];
+        }
+        for (Portal p:visitStackArray) {
+            System.out.println(p.getChamber()+" C "+p.getDoor()+" D");
+        }
+
+
+
+        return visitStackArrayInverted;
     }
 
 }
