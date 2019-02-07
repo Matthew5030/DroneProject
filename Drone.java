@@ -73,6 +73,38 @@ public class Drone implements DroneInterface {
     @Override
     public Portal searchStep() {
         /* WRITE YOUR CODE HERE */
+        int doorCount = 0;
+        //visited.add(new Portal(this.maze.getCurrentChamber(),0));
+        visited.add(new Portal(this.maze.getCurrentChamber(),0));
+        for (int i = 0; i <this.maze.getNumDoors() ; i++) {
+            Portal testPortal = new Portal(this.maze.getCurrentChamber(),doorCount);
+            System.out.println("door "+i);
+            if(visited.contains(testPortal)){
+                System.out.println("Already visited!");
+            }
+        }
+
+
+
+
+
+
+        /*
+        1. visit stack shows the way back
+        2. visit queue i need to add the portal as i go
+        3. (0)-1 -------2-(3)
+        4. where you kleave in the back of the queue .add last
+        5. add the place you arrive to the stack
+        6. search step and single search
+        7. if it is not in the visit queue (gone through) but it is in visited
+        then go explore it if no unexplored one
+
+         */
+
+
+
+
+
         return null;
     }
 
