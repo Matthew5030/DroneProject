@@ -70,19 +70,93 @@ public class Drone implements DroneInterface {
     /*
      * @see dsa_assignment2.DroneInterface#searchStep()
      */
+    /*
+
+
+     */
     @Override
     public Portal searchStep() {
         /* WRITE YOUR CODE HERE */
-        int doorCount = 0;
-        //visited.add(new Portal(this.maze.getCurrentChamber(),0));
-        visited.add(new Portal(this.maze.getCurrentChamber(),0));
-        for (int i = 0; i <this.maze.getNumDoors() ; i++) {
-            Portal testPortal = new Portal(this.maze.getCurrentChamber(),doorCount);
-            System.out.println("door "+i);
-            if(visited.contains(testPortal)){
+
+        Portal testPortal = null;
+
+        //visited.add(new Portal(this.maze.getCurrentChamber(), 0));
+        //visited.add(new Portal(this.maze.getCurrentChamber(), 1));
+
+        boolean newNodeFound = false;
+
+        for (int doorCounter = 0; doorCounter < this.maze.getNumDoors(); doorCounter++) {
+
+
+
+            testPortal = new Portal(this.maze.getCurrentChamber(), doorCounter);
+            System.out.println("Current node: "+testPortal.getChamber());
+
+            System.out.println("door " + doorCounter);
+
+            if (visited.contains(testPortal)) {
+
                 System.out.println("Already visited!");
+                //testPortal=null;
+
+            }else{
+
+                newNodeFound=true;
+
+
+                visited.add(testPortal);
+                visitQueue.addLast(testPortal);
+
+                testPortal = this.maze.traverse(doorCounter);//new node
+
+                visited.add(testPortal);// add the nodes to visits
+                visitStack.addLast(testPortal);//add the portal used to enter as a return
+
+                doorCounter=this.maze.getNumDoors();//escape the for loop
+
+                System.out.println("moved to a new portal "+testPortal.getChamber());
             }
+
         }
+
+        if (!newNodeFound){
+
+            for (int doorCounter = 0; doorCounter < this.maze.getNumDoors(); doorCounter++) {
+
+
+
+                testPortal = new Portal(this.maze.getCurrentChamber(), doorCounter);
+                System.out.println("Current node: "+testPortal.getChamber());
+
+                System.out.println("door " + doorCounter);
+
+                if (visitQueue.contains(testPortal)) {
+
+                    System.out.println("Already used path!");
+
+                }else{
+
+                    visitQueue.addLast(testPortal);
+
+                    testPortal = this.maze.traverse(doorCounter);//new node
+
+
+                    visitStack.addLast(testPortal);//add the portal used to enter as a return
+
+                    doorCounter=this.maze.getNumDoors();//escape the for loop
+
+                    System.out.println("moved on new path! "+testPortal.getChamber());
+                    return testPortal;
+                }
+
+            }
+            testPortal=null;
+            return testPortal;
+        }else{
+            return testPortal;
+        }
+
+    }
 
 
 
@@ -103,10 +177,6 @@ public class Drone implements DroneInterface {
 
 
 
-
-
-        return null;
-    }
 
     /*
      * @see dsa_assignment2.DroneInterface#getVisitOrder()
