@@ -70,31 +70,17 @@ public class Drone implements DroneInterface {
     @Override
     public Portal searchStep() {
         /* WRITE YOUR CODE HERE */
-
         Portal testPortal = null;
-
-        //visited.add(new Portal(this.maze.getCurrentChamber(), 0));
-        //visited.add(new Portal(this.maze.getCurrentChamber(), 1));
 
         boolean newNodeFound = false;
 
         for (int doorCounter = 0; doorCounter < this.maze.getNumDoors(); doorCounter++) {
 
-
             testPortal = new Portal(this.maze.getCurrentChamber(), doorCounter);
-            //System.out.println("Current node: "+testPortal.getChamber());
 
-            //System.out.println("door " + doorCounter);
-
-            if (visited.contains(testPortal)) {
-
-                // System.out.println("Already visited!");
-                //testPortal=null;
-
-            } else {
+            if (!visited.contains(testPortal)) {
 
                 newNodeFound = true;
-
 
                 visited.add(testPortal);
                 visitQueue.addLast(testPortal);
@@ -106,7 +92,7 @@ public class Drone implements DroneInterface {
 
                 doorCounter = this.maze.getNumDoors();//escape the for loop
 
-                //System.out.println("moved to a new portal "+testPortal.getChamber());
+
             }
 
         }
@@ -117,15 +103,10 @@ public class Drone implements DroneInterface {
 
 
                 testPortal = new Portal(this.maze.getCurrentChamber(), doorCounter);
-                //System.out.println("Current node: "+testPortal.getChamber());
 
-                //System.out.println("door " + doorCounter);
 
-                if (visitQueue.contains(testPortal)) {
+                if (!visitQueue.contains(testPortal)) {
 
-                    //System.out.println("Already used path!");
-
-                } else {
 
                     visitQueue.addLast(testPortal);
 
@@ -134,17 +115,19 @@ public class Drone implements DroneInterface {
 
                     visitStack.addLast(testPortal);//add the portal used to enter as a return
 
-                    doorCounter = this.maze.getNumDoors();//escape the for loop
 
-                    //System.out.println("moved on new path! "+testPortal.getChamber());
                     return testPortal;
                 }
 
             }
+
             testPortal = null;
             return testPortal;
+
         } else {
+
             return testPortal;
+
         }
 
     }
@@ -184,9 +167,13 @@ public class Drone implements DroneInterface {
         for (int i = 0; i < visitQueue.size() * 2; i++) {
 
             if ((i % 2) == 0) {//even
+
                 PortalSequence[i] = visitQueueArray[i / 2];
+
             } else {//odd
+
                 PortalSequence[i] = visitStackArray[i / 2];
+
             }
 
 
@@ -201,91 +188,53 @@ public class Drone implements DroneInterface {
     public Portal[] findPathBack() {
         //basic route back
         Portal[] visitStackArray = new Portal[visitStack.size()];
-        Portal[] visitStackArrayInverted = new Portal[visitStack.size()];
+        Portal[] invertedArray = new Portal[visitStack.size()];
         visitStackArray = visitStack.toArray(visitStackArray);
         Deque<Portal> workingRoute = new ArrayDeque<>();
         for (int i = 0; i < visitStackArray.length; i++) {
-            visitStackArrayInverted[i]=visitStackArray[visitStackArray.length-i-1];
+            invertedArray[i] = visitStackArray[visitStackArray.length - i - 1];
         }
 
         //cut loops
 
         //fill a constant array with all portals
 
+        int startOfLoopIndex = 0;
 
+        while (startOfLoopIndex < invertedArray.length) {
 
+            int endOfLoopChecker = 0;
 
-        for (int i = 0; i < visitStackArrayInverted.length; i++) {
-            for (int j = 0; j < visitStackArrayInverted.length; j++) {
-                if (visitStackArrayInverted[i].getChamber()==visitStackArrayInverted[j].getChamber()){
-                    i=j;
+            while (endOfLoopChecker < invertedArray.length) {
+
+                if (invertedArray[startOfLoopIndex].getChamber() == invertedArray[endOfLoopChecker].getChamber()) {
+
+                    startOfLoopIndex = endOfLoopChecker;
+
                 }
-            }
-            if(visitStackArrayInverted[i].getChamber()!=0){
-                workingRoute.add(visitStackArrayInverted[i]);
-            }else{
-                i=visitStackArrayInverted.length;
+
+                endOfLoopChecker++;
 
             }
+
+            if (invertedArray[startOfLoopIndex].getChamber() != 0) {
+
+                workingRoute.add(invertedArray[startOfLoopIndex]);
+
+            } else {
+
+                startOfLoopIndex = invertedArray.length;
+
+            }
+
+            startOfLoopIndex++;
+
         }
 
         Portal[] finalRoute = new Portal[workingRoute.size()];
-        finalRoute=workingRoute.toArray(finalRoute);
-
-
-        //go through the array and get the largets node value
-        //then run a for loop which starts from 0 -> largest
-            //
-
-
-
-
-
-
-
-
-
-
-
+        finalRoute = workingRoute.toArray(finalRoute);
 
         return finalRoute;
     }
 
 }
-/*
-
-
-//list trimming
-        ArrayList appeared = new ArrayList();
-        Deque<Portal> finalRoute = new ArrayDeque<>();
-        for (int i = 0; i <visitStackArrayInverted.length ; i++) {
-
-            int currentChamber = visitStackArrayInverted[i].getChamber();
-
-
-
-
-
-            if(finalRoute.contains(visitStackArrayInverted[i])){
-                //back track
-                /*
-                do{
-
-                    finalRoute.pop();
-                }while(finalRoute.contains(visitStackArrayInverted[i]));
-                finalRoute.add(visitStackArrayInverted[i]);
-
-            }else{
-                    finalRoute.add(visitStackArrayInverted[i]);
-                    }
-
-
-                    }
-
-                    Portal[] finalRouteArray = new Portal[finalRoute.size()];
-                    finalRouteArray = finalRoute.toArray(visitStackArray);
-
-                    for (Portal p:finalRouteArray) {
-            System.out.println(p.getChamber()+" C "+p.getDoor()+" D");
-        }
- */
