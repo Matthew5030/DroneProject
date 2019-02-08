@@ -2,10 +2,7 @@ package dsa_assignment2;
 
 import org.apache.log4j.Logger;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A Drone class to simulate the decisions and information collected by a drone
@@ -202,28 +199,93 @@ public class Drone implements DroneInterface {
      */
     @Override
     public Portal[] findPathBack() {
-        /* WRITE YOUR CODE HERE */
-        //Only the portals taken to exit each
-        //	 * chamber should be included.
-
-
+        //basic route back
         Portal[] visitStackArray = new Portal[visitStack.size()];
         Portal[] visitStackArrayInverted = new Portal[visitStack.size()];
-
-
         visitStackArray = visitStack.toArray(visitStackArray);
-
-
+        Deque<Portal> workingRoute = new ArrayDeque<>();
         for (int i = 0; i < visitStackArray.length; i++) {
             visitStackArrayInverted[i]=visitStackArray[visitStackArray.length-i-1];
         }
-        for (Portal p:visitStackArray) {
-            System.out.println(p.getChamber()+" C "+p.getDoor()+" D");
+
+        //cut loops
+
+        //fill a constant array with all portals
+
+
+
+
+        for (int i = 0; i < visitStackArrayInverted.length; i++) {
+            for (int j = 0; j < visitStackArrayInverted.length; j++) {
+                if (visitStackArrayInverted[i].getChamber()==visitStackArrayInverted[j].getChamber()){
+                    i=j;
+                }
+            }
+            if(visitStackArrayInverted[i].getChamber()!=0){
+                workingRoute.add(visitStackArrayInverted[i]);
+            }else{
+                i=visitStackArrayInverted.length;
+
+            }
         }
 
+        Portal[] finalRoute = new Portal[workingRoute.size()];
+        finalRoute=workingRoute.toArray(finalRoute);
 
 
-        return visitStackArrayInverted;
+        //go through the array and get the largets node value
+        //then run a for loop which starts from 0 -> largest
+            //
+
+
+
+
+
+
+
+
+
+
+
+
+        return finalRoute;
     }
 
 }
+/*
+
+
+//list trimming
+        ArrayList appeared = new ArrayList();
+        Deque<Portal> finalRoute = new ArrayDeque<>();
+        for (int i = 0; i <visitStackArrayInverted.length ; i++) {
+
+            int currentChamber = visitStackArrayInverted[i].getChamber();
+
+
+
+
+
+            if(finalRoute.contains(visitStackArrayInverted[i])){
+                //back track
+                /*
+                do{
+
+                    finalRoute.pop();
+                }while(finalRoute.contains(visitStackArrayInverted[i]));
+                finalRoute.add(visitStackArrayInverted[i]);
+
+            }else{
+                    finalRoute.add(visitStackArrayInverted[i]);
+                    }
+
+
+                    }
+
+                    Portal[] finalRouteArray = new Portal[finalRoute.size()];
+                    finalRouteArray = finalRoute.toArray(visitStackArray);
+
+                    for (Portal p:finalRouteArray) {
+            System.out.println(p.getChamber()+" C "+p.getDoor()+" D");
+        }
+ */
